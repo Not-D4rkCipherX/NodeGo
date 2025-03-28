@@ -38,7 +38,7 @@ class NodeGo:
         {Fore.GREEN + Style.BRIGHT}Auto Ping {Fore.BLUE + Style.BRIGHT}NodeGo - BOT
             """
             f"""
-        {Fore.GREEN + Style.BRIGHT}Join For More Script: {Fore.YELLOW + Style.BRIGHT}(https://t.me/D4rkCipherX)
+        {Fore.GREEN + Style.BRIGHT}Join: {Fore.YELLOW + Style.BRIGHT}https://t.me/D4rkCipherX
             """
         )
 
@@ -293,6 +293,13 @@ class NodeGo:
         for attempt in range(retries):
             try:
                 response = await asyncio.to_thread(requests.post, url=url, headers=headers, data=data, proxy=proxy, timeout=60, impersonate="safari15_5")
+                if response.status_code == 429:
+                    return self.print_message(self.mask_account(email), proxy, Fore.WHITE, 
+                        f"Node {num_id} "
+                        f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT} PING Failed: {Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT}Too many request!{Style.RESET_ALL}"
+                    )
                 response.raise_for_status()
                 result = response.json()
                 return result["metadata"]
@@ -379,10 +386,10 @@ class NodeGo:
             print(
                 f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
                 f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
-                f"{Fore.BLUE + Style.BRIGHT}Wait For 2 Minutes For Next Ping...{Style.RESET_ALL}",
+                f"{Fore.BLUE + Style.BRIGHT}Wait For 10 Minutes For Next Ping...{Style.RESET_ALL}",
                 end="\r"
             )
-            await asyncio.sleep(2 * 60)
+            await asyncio.sleep(10 * 60)
 
     async def process_get_user_data(self, token: str, email: str, use_proxy: bool):
         proxy = self.get_next_proxy_for_account(email) if use_proxy else None
